@@ -1,0 +1,26 @@
+f<- read.csv("Placement_Data_Full_Class.csv")
+f <- f[,-15]
+f$gender = as.factor(f$gender)
+f$ssc_p = as.factor(f$ssc_p)
+f$ssc_b = as.factor(f$ssc_b)
+f$hsc_p = as.factor(f$hsc_b)
+f$hsc_s = as.factor(f$hsc_s)
+f$hsc_b = as.factor(f$hsc_b)
+f$degree_p = as.factor(f$degree_p)
+f$degree_t = as.factor(f$degree_t)
+f$workex = as.factor(f$workex)
+f$etest_p = as.factor(f$etest_p)
+f$specialisation = as.factor(f$specialisation)
+f$mba_p = as.factor(f$mba_p)
+f$status = as.factor(f$status)
+set.seed(123)
+a <- sample(2, nrow(f), replace = TRUE, prob = c(0.75, 0.25))
+traning <- f[a==1,]
+test <- f[a==2,]
+library(nnet)
+#model <- multinom(status = gender +ssc_p+ssc_b+hsc_s+hsc_p+hsc_b+degree_p+degree_t+workex+etest_p+specialisation+mba_p, data = traning, weights = NULL)
+model <- glm(status ~.,data = traning, family=binomial(link="logit"),control = list(maxit = 50) )
+#library(arm)
+#model <- bayesglm(status~., data = traning, family = "binomial")
+predict(model)
+
